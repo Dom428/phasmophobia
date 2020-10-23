@@ -334,3 +334,316 @@ Generic VOIP recognition
             Turn off the light
             Are there any ghosts
             Give us a sign
+Ghost activity
+
+    Ghosts have random ability values set at the start of an idle phase, based on difficulty.
+        Amateur: 100
+        Intermediate: 115
+        Professional: 130
+
+    Certain ghosts have their own multiplier that change depending on in-game events:
+        Oni multiplier: 30 if the ghost is an Oni and there are people in the room
+        Wraith multiplier: 50 if ghost is a Wraith and they have walked in salt
+
+    Hunting multiplier
+        Starts at 0
+        Does not increase steadily over time
+        Decreases by 10 if ghost type is a Mare and a light switch in their current room is on
+        Increases by 10 if ghost type is a Mare and no lights in their current room are on, or there are no light switches in their current room
+        Increases by 15 if the ghost type is a Demon
+
+    Ghost activity level
+        Starts at 0
+        Increases by 10 to 25 on phrase recognition
+        Increases by 20-30 if a smudge stick is used within 6m of it
+        Decays by deltaTime (time since last frame) / 2 every frame, capped at 0
+
+    If a random number from 0 to <random ability value> (based on difficulty) is greater than or equal to their current activity level, including all ghost-specific multipliers, and an additional 15% if playing solo, they have a chance of interacting with objects, or going to their favourite room, appear, use the fusebox, etc.
+        This means that a higher Ghost activity level, Oni/Wraith multiplier, and playing solo decreases the chance of the ghost interacting with the house
+
+    Ghosts can throw any prop around the house. A prop moving does not indicate the ghost being nearby. Poltergeists throw objects with a random force between ((-5, 5), (-2.5, 2.5), (-3, 3)), while other ghosts throw them with a random force between ((-2.5, 2.5), (-2, 2), (-2.5, 2.5))
+
+Ghost Powers
+
+    All ghosts have a 4-in-12 chance of entering a ghost ability state.
+    Ghosts that have specific behaviours (listed below) have a 2-in-12 chance of using their specific power on Amateur, and a 2-in-15 chance on other difficulties, once this state has been entered.
+
+Banshee
+
+    If the Banshee's current target is outside the house, it will not use its ability
+    The Banshee will move onto the target player's position
+    The Banshee will wait 20s, then, if the target player is not visible, the Banshee will go into hunting phase. If the current game is a tutorial, it will go back to idle.
+
+Jinn
+
+    If the fusebox is off, Jinns will not enter their ability state, and will return to idle
+    Once the Jinn enters their ability state, it will wait 5 seconds before using the ability.
+    If a player is within 3m of the Jinn when it activates its ability, that player's insanity will increase by 25%.
+    A Ghost Interaction EMF (Level 2) will be created at the ghost's raycast point.
+    After a Jinn has used its ability, it cannot use it again for 100s
+
+Phantom
+
+    The Phantom will navigate to a random player's location
+    The Phantom will create a Ghost Interaction (Level 2) EMF at its raycast point
+    Once it reaches the random player's position, it will enter idle phase
+
+Poltergeist
+
+    If the Poltergeist has no props to interact with, it will return to idle phase
+    If there are props to interact with, the Poltergeist will throw all of them with a random force of ((-4,4), (-2,2), (-4,4)), and create a Ghost Throwing (Level 3) EMF at the thrown prop's location.
+    If the player was not in line-of-sight of the EMF spot when it spawned, the player's insanity will increase by 2x the number of props thrown
+
+Wraith
+
+    The Wraith will choose a random player
+    If the chosen player is outside the house, or dead, the Wraith will return to idle phase
+    If the chosen player is in the house and not dead, the Wraith will teleport to a spot within 3m of the chosen player, then return to idle phase
+    
+Ghost interactions
+
+    Ghosts have a 5-in-12 chance of doing random interactions such as opening doors, throwing props, and writing in ghost books, after satisfying the insanity check   above
+    Random ghost interactions, including sounds, turning on faucets, moving items, teleporting items, etc, do not generate EMF spots.
+    Being within 3m of a Jinn instantly drops your sanity by 25%
+
+Ghost Events
+
+    Ghost events for the optional objective occur as part of random ghost interactions
+    Ghosts have a 10-in-15 chance (which changes to 10-in-13 on higher difficulties) to enter a randomEvent phase
+    After all these checks, it can either:
+        appear to the player, and create a Ghost Appeared (Level 4) EMF Spot
+        turn off light switches
+        slam doors shut, and create a Ghost Appeared (Level 4) EMF Spot
+        spawn a random player's model, play a scream if the spawned model or ghost is within 2m of the player
+            This one doesn't seem to be implemented, as the game contains code to select a random player model, but never uses it
+    A ghost event will decrease a random player's insanity by 20% (not sure if this is intended)
+Ghost phases
+
+Ghost phases are determined by average player sanity, multiplied by a hunting multiplier, and alternatively multiplied by an Oni or Wraith multiplier.
+In truck
+
+Ghosts stay in their favourite room until the main door has been unlocked
+Setup phase
+
+Setup phase is when the timer in the truck is non-zero:
+
+    Amateur has 5 minutes of setup phase
+
+    Intermediate has 2 minute of setup phase
+
+    Professional has 0 minutes of setup phase
+
+    Ghosts cannot enter hunting phase during this time, but will instead be sent straight to their favourite room.
+
+    "Hunting phase" starts immediately after setup phase, but this merely means regular phase, and not a true hunting phase
+
+    Entering a recognised phrase into a Ouija Board has a 1-in-3 chance of ending setup phase
+
+Idle
+
+    All ghosts have an idle timer of 2-6 seconds, set when they return to an idle state
+    Once their idle timer has elapsed, the ghost has a 1-in-2 chance of attempting to enter a hunting phase, depending on the team's average insanity and the current hunting multiplier.
+        Average team insanity considers everyone in the game, not just those in the house
+        If 50 < average player insanity + hunting multiplier < 75, the ghost has a 1-in-6 chance of entering hunting phase
+        If average player insanity + hunting multiplier >= 75, the ghost has a 1-in-4 chance of entering hunting phase
+    If a random number generated between 0 and the ghost's random activity value (discussed in Ghost Activity) is greater than their current activity multiplier, the ghost has a 1-in-2 chance of doing an interaction, using their ghost ability, or entering Wander phase.
+
+Wander
+
+    Ghosts can wander up to 3m from their current location at a time.
+
+    Wraiths can occasionally teleport to the player's location, leaving a Ghost Interaction EMF (Level 2) at their new location
+
+    If a smudge stick is within 6m of the ghost, it will:
+        add a random value between 20 and 30 to their activity multiplier,
+        stop the ghost from hunting for 90s (or 180s for Spirits)
+        stop Yureis from wandering for 90s
+
+    Banshees choose a new target when their current target dies, or if they leave the building. If no players are in the building, they will return to their favourite room.
+        Banshees choose the first player in the player list who is not dead
+
+    Revenants move 1.5x slower than other ghosts when not chasing a player. When they are chasing a player, they are 2x faster than other ghosts.
+
+    Jinns move at 2x Unity's default navmesh movement speed when you are more than 4m away from it, and the fusebox is on.
+
+Ghost appearing
+
+    Ghosts have a random chance of appearing only as a shadow, but only for alive players. Dead players will always see the full model.
+    1-in-2 chance if it is part of a random event. 1-in-3 chance as part of a hunt, appearance, or player kill
+
+Hunting
+
+    Hunting phases last for 25 seconds in Amateur, 35 seconds in Intermediate, and 50 seconds in Professional.
+
+    When a hunting phase starts, the following will occur:
+        Ghosts pick a player to chase at the start of a hunting phase. This changes during a phase if the target player leaves the ghost's line of sight, or for non-Banshees, if another player steps closer to the ghost than the previous target player.
+        While chasing a player, the ghost uses one raytrace to check for line of sight, from its raycastPoint to the player's head position. This means crouching behind objects may prove useful.
+        While not chasing a player, ghosts cast two rays to check for line of sight
+            One ray directly from their raycastPoint (likely located near their head, but unknown at this time)
+            If the direct ray fails, one ray 0.167m to the right of their raycastPoint
+            If both of these raytraces fail, it will default to chasing the original target player
+            If the ghost is not a Banshee, it will cast two rays at each player to check for line of sight
+                One ray from their raycastPoint
+                One ray 0.01m to the right of their raycastPoint
+            If both of these raytraces fail, it will default to targeting the first non-dead player
+        A Ghost Appeared EMF (Level 3) reading will be created where they spawn
+        All entries to the house will be locked
+        If a crucifix is within 3m of the ghost (or 5m for banshees), the hunt will be cancelled, and the ghost will return to its favourite room.
+        If the ghost is a shade and there is more than 1 player in the room, hunting phase will be cancelled, and the ghost will return to their favourite room.
+
+    During hunting phases, the following occurs:
+        The ghost will start flickering the fusebox and all flashlights to indicate the successful start of a hunting phase (i.e. phase was not cancelled by anything listed above)
+        Phantoms appear every 1-2 seconds, while all other ghost types appear every 0.3-1 seconds.
+
+    The ghost will return to its favourite room when the player they are targeting is dead.
+
+    If a smudge stick is within 1.5m of their teleport destination, they will return to their favourite room
+
+    After killing a player, the ghost will teleport back to where it was just before the hunting phase began, and reset to idle phase. They cannot initiate hunting phase for the next 25 seconds.
+Items
+Candles
+
+    Candles can stay on for a random amount of time between 2.5 and 5 minutes. This value is determined when the candle is lit.
+
+Cameras
+
+    If a ghost enters the view of a camera (i.e. the ghost is in the same room as the camera) when the fusebox is off, and no lights in that room are on, the ghost will turn off the camera and leave a Ghost Interaction EMF (Level 2) on the camera.
+
+EMF Reader
+
+The EMF Reader tells you different things about the ghost depending on what level you detected:
+
+    Level 1: Default
+
+    Level 2: The ghost interacted with whatever something near you
+        Level 2 EMF spots have a 1-in-4 chance of showing as EMF Level 5, if your ghost has EMF Level 5 as a trait
+
+    Level 3: The ghost recently threw something near you
+
+    Level 4: The ghost appeared there recently
+        This happens at the beginning of hunting phases, and during random appearance events
+
+    Level 5: Simply used for evidence
+
+    EMF Spots only last for 20 seconds after the ghost has done something in that area, and will disappear after this time has elapsed. This will never change, regardless of whether the ghost is still in the room or not.
+
+    The EMF reader does not actually work based on look direction. It simply gets activated based on its location, and whether it is colliding with any EMF triggers in the map.
+
+    Currently unknown how large these triggers are
+
+    EMF reading levels can change while turning if the EMF reader enters another trigger which overlaps the current one, as the EMF reader just shows the level of the highest EMF zone that it overlaps
+
+Truck EMF Data
+
+    The truck's EMF graph shows the sum of all EMF spots in the house, capped at 10
+
+Ouija Board
+
+    A player has to either wear a VR headset or use local push to talk if Local Push to Talk is enabled in settings. The ghost will always hear your voice if you use Voice Activation mode.
+        In solo games, Push to Talk is not needed, regardless of the menu setting
+    Multiple people can be in the room when using the board
+    A player must be within 5m of the board for it to work
+    Entering a recognised phrase into a Ouija Board has a 1-in-3 chance of doing all of the following:
+        flickering all lights in the player's room
+        increasing your insanity by 40%
+        Ending setup phase
+    The ouija board responds to victim, age, dead, room amount, and location questions. The English questions are below. All languages can be found in localisation.csv found in this repository (Look for Ouija_ entries)
+        How old are you
+        What is your age
+        Are you old
+        Are you young
+        How long have you been dead
+        How many years ago did you die
+        How long have you been here
+        How long ago did you die
+        When did you die
+        Where are you
+        What is your favourite room
+        Where is your room
+        What is your room
+        Are you here
+        Are you close
+        Are there any spirits
+        Are you near
+        Are you around
+        How many are in this room
+        How many people are in this room
+        How many people are here
+        How many ghosts are in this room
+        How many ghosts are here
+        Are you alone
+        Are we alone
+        Who is here
+        Who is in this room
+        Who did you kill
+        Who is your victim
+        What is the name of the person you killed
+        What is the name of the person you murdered
+        What is your victim
+        Did you murder
+        Who did you murder
+        Who died
+    All ghosts besides Demons will increase your insanity by a random value between 5 and 10% upon receiving an answer
+
+Photo camera
+
+    You must be within 5m of the evidence you are taking a photo of for it to count in your journal
+    Photos of journal evidence are detected via a raycast from your camera's world position to the evidence's world position. For it to register properly in your journal, ensure no one is standing between the camera and the evidence.
+    Photos of any evidence in the level count for your journal:
+        EMF spots
+        Ouija board
+        Fingerprints
+        Footsteps
+        DNA (Bone)
+        Ghosts
+        Dead bodies
+        Dirty water
+    The game performs a simple ray cast from the camera's world position to the ghost's "raycastPoint", which may not be at its head. As a result, you should frame the entire ghost in your photos to complete the mission.
+    Phantoms disappear after having their photo taken. This removes their sanity draining effect as well.
+
+Salt
+
+    Ghosts only walk on salt spots once
+    Ghosts do not affect salt spots during hunting phase
+
+Smudge Sticks
+
+    When a smudge stick is used (i.e. starts smoking), the game checks if the smudge stick is within 6m of the ghost. If this is the case, the ghost will will:
+        add a random value between 20 and 30 to their activity multiplier,
+        stop the ghost from hunting for 90s (or 180s for Spirits)
+        halt a hunting ghost for 5 seconds
+        stop Yureis from wandering for 90s
+
+Sound Sensors / Parabolic Microphone
+
+    Sound sensors and parabolic microphones work in similar ways. Sound sensors provide data on the loudest sound source they detect, while parabolic microphones provide the sum of all sound sources it detects
+    Both systems work based on intersection with Noise triggers placed around the map. These are variable-sized box colliders that have volumes attached to them
+    As with the EMF Reader, these devices are NOT dependant on look angles, but uses the device's world position for intersection calculations. This means that the device may provide different readings while stationary and looking around if you are standing at the very border of two intersecting triggers.
+    Sound sensor values are updated in the truck every 5 seconds
+    Parabolic microphone values are updated at random intervals between 1 and 2 seconds
+    Sound sources
+        Car
+        Door
+        EMF Reader
+        Spirit Box
+        Footsteps
+        Fuse box
+        Ghost throws
+        Camera shutters
+        Using a lighter
+        Motion sensors
+        Ouija boards
+        Sanity pills
+        Paintings falling
+        Player push to talk (local and global)
+        Salt
+        Sinks
+        Thermometers
+        Torches
+
+Thermometer
+
+    As explained in Freezing Temperatures, non-freezing temperature ghosts will drop a room down to 5C, and frezing temperature ghosts drop the room down ot -10C. Your thermometer shows values +- 2C from the actual value, so if you see any values below 3C (37.4F), you have a ghost with Freezing Temperatures.
+    The thermometer shoots a 6m ray from the bottom of the handle, not the actual front of the gun, and displays the temperature for the location of the first thing the ray hit
+    If the 6m raycast fails, it will not update the temperature on the thermometer's display
+    This is a visual representation of 6m in the game:     
