@@ -5,7 +5,7 @@ General Gameplay
     Intermediate is 1.5 difficulty
     Professional is 2 difficulty
 
-Sanity
+**Sanity**
 
     Game internally uses insanity, which is then displayed as sanity in the truck as (100 - insanity) + Random.Range(-2, 3)
 
