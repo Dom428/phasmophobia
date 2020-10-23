@@ -1,4 +1,4 @@
-General Gameplay
+**General Gameplay**
 
     Tutorial is 0.5 difficulty
     Amateur is 1 difficulty
@@ -40,31 +40,32 @@ General Gameplay
         Ghosts have a default sanity drain factor of 0.2
         Phantoms have a sanity draining strength of 0.4
 
-Sanity effects
+**Sanity effects**
 
     The game will attempt to spawn ghosts at a window when the player is inside the house at a random interval between 10s and 30s if the player's insanity is above    50, otherwise at a random interval between 10s and 20s.
     This ghost will start far away from the window and dash towards the window until it is 0.2m away, then disappear
     Evidence
-Dirty Water
+    
+**Dirty Water**
 
     Ghosts will use a tap and spawn dirty water as soon as they enter a bathroom
     Ghosts leave a Ghost Interaction EMF (Level 2) on the sink
 
-Freezing Temperatures
+**Freezing Temperatures**
 
     Ghosts that have freezing temperatures as an attribute will make the room they are in go down to -10C (14F), while all other ghosts make the room drop to 5C (41F). However, your thermometer has a +-2C randomness, so as soon as you see your thermometer go below 3C or 37.4F, or if you see cold puffs when you are in a room, you can tick off Freezing Temperatures.
 
-Ghost Orbs
+**Ghost Orbs**
 
     Ghost orbs only spawn in the ghost's favourite room, and can be seen in the doorway to that room from a hallway. This favourite room is designated on ghost spawn
     Ghost orbs can be seen before entering the house if a fixed camera is pointing at the door/hallway to their favourite room.
 
-Ghost Writing
+**Ghost Writing**
 
     Ghosts have a 5-in-12 chance of doing random interactions such as opening doors, throwing props, and writing in ghost books.
     The ghost book does not appear to need to be in the ghost's room. Yet to be confirmed.
 
-Spirit Box
+**Spirit Box**
 
     Ghosts can only respond once every 10 seconds
     "Nothing detected" means the game recognised your phrase, but it triggered a fail check. However, fail checks and answers do not seem to be mutually exclusive.
@@ -133,112 +134,8 @@ Spirit Box
                 Are you a child,
                 Are you old,
                 Are you young
-Ghost behaviour
-Car
 
-    The car alarm can be turned on when the ghost is within 2m of the car. When the alarm is on, the car's headlights will also be on, and it will play some sounds.
-    To turn it off, you need the car keys and hit Use on the car. As soon as the car alarm turns on, a Ghost Interaction EMF (Level 2) spot will be created at the car's position.
-
-Doors
-
-    As soon as a ghost with fingerprints touches a door, it will spawn the fingerprint evidence, but only on one side of the door. Fingerprint evidence does not spawn Ghost Interaction EMF
-    Doors always lock during hunting phase, and will remain locked for a random amount of time between 10 and 20 seconds
-    Doors all start with a locked timer between 5-20 seconds
-    Ghosts make door knocking sounds when they are within 3m of the door, and create a Ghost Interaction EMF (Level 2) at the door's audio source location.
-    Ghosts can close and lock doors randomly, which do NOT trigger Ghost Interaction EMFs.
-
-Favourite Rooms
-
-Ghosts stay in their favourite room for 30 seconds, then return to their idle phase
-Footsteps
-
-    Wraiths do not make black light footsteps after stepping on a salt pile
-    Wraiths have an additional Wraith multiplier set to 50 after stepping in salt, making it less likely to start a hunting phase
-    Ghost footsteps play at 5% volume during non-hunting and non-appearing phases
-    When the ghost has appeared, footsteps are immediately played at full volume when in line of sight, then at 30% volume while you can still see the ghost
-    During hunting phase, random hunting noises are played at full volume, then at 30% while you can still see the ghost
-
-Fusebox
-
-    Small houses can have a max of 10 lights on
-    Medium houses can have a max of 9 lights on
-    Large houses can have a max of 8 lights on
-    The ghost spawns a Ghost Interaction EMF (Level 2) when they use the fusebox
-    Ghosts have a 1-in-5 chance of turning the fusebox back on
-
-Generic VOIP recognition
-
-    Ghosts can react with your voice all throughout the game, even when you are not holding down a VOIP key
-
-    You must be in the ghost room to trigger a response
-
-    You must be in a room for more than 2 seconds for phrases to be recognised
-
-    Shy ghosts will not respond to you if there are multiple people in the room
-
-    Ghosts can react to their name at any time, even when you are not holding down a VOIP key, with a 20 second delay in between reactions
-
-    Saying the ghost's name makes the ghost more likely to respond to the Spirit Box
-
-    Saying just the ghost's first name is sufficient
-
-    A generic ghost reaction will add a random value between 10 and 25 to their activity multiplier
-
-    Generic reactions have a 1-in-200 chance of the ghost turning the fusebox off
-
-    Generic reactions have a 1-in-8 chance of interacting with a random prop
-
-    Generic reactions have a 1-in-8 chance of interacting with a random door
-
-    Generic reaction phrases
-        "Fuck",
-        "Bitch",
-        "Shit",
-        "Cunt",
-        "Ass",
-        "Bastard",
-        "Motherfucker",
-        "Motherfucker", (yes, this is repeated. Probably indicattes a higher chance of them reacting to this)
-        "Arsehole",
-        "Crap",
-        "Pussy",
-        "Dickhead",
-        "Bloody Mary"
-        Plus 57 more that are language-specific. The English versions are provided below. For all langauges, refer to localisation.csv found in this repository, and search for Phrase_. All these are taken directly from the .csv, lack of punctuation, spelling errors, and all.
-        Ghost behaviour
-Car
-
-    The car alarm can be turned on when the ghost is within 2m of the car. When the alarm is on, the car's headlights will also be on, and it will play some sounds.
-    To turn it off, you need the car keys and hit Use on the car. As soon as the car alarm turns on, a Ghost Interaction EMF (Level 2) spot will be created at the car's position.
-
-Doors
-
-    As soon as a ghost with fingerprints touches a door, it will spawn the fingerprint evidence, but only on one side of the door. Fingerprint evidence does not spawn Ghost Interaction EMF
-    Doors always lock during hunting phase, and will remain locked for a random amount of time between 10 and 20 seconds
-    Doors all start with a locked timer between 5-20 seconds
-    Ghosts make door knocking sounds when they are within 3m of the door, and create a Ghost Interaction EMF (Level 2) at the door's audio source location.
-    Ghosts can close and lock doors randomly, which do NOT trigger Ghost Interaction EMFs.
-
-Favourite Rooms
-
-Ghosts stay in their favourite room for 30 seconds, then return to their idle phase
-Footsteps
-
-    Wraiths do not make black light footsteps after stepping on a salt pile
-    Wraiths have an additional Wraith multiplier set to 50 after stepping in salt, making it less likely to start a hunting phase
-    Ghost footsteps play at 5% volume during non-hunting and non-appearing phases
-    When the ghost has appeared, footsteps are immediately played at full volume when in line of sight, then at 30% volume while you can still see the ghost
-    During hunting phase, random hunting noises are played at full volume, then at 30% while you can still see the ghost
-
-Fusebox
-
-    Small houses can have a max of 10 lights on
-    Medium houses can have a max of 9 lights on
-    Large houses can have a max of 8 lights on
-    The ghost spawns a Ghost Interaction EMF (Level 2) when they use the fusebox
-    Ghosts have a 1-in-5 chance of turning the fusebox back on
-
-Generic VOIP recognition
+**Generic VOIP recognition**
 
     Ghosts can react with your voice all throughout the game, even when you are not holding down a VOIP key
 
@@ -334,7 +231,7 @@ Generic VOIP recognition
             Turn off the light
             Are there any ghosts
             Give us a sign
-Ghost activity
+**Ghost activity**
 
     Ghosts have random ability values set at the start of an idle phase, based on difficulty.
         Amateur: 100
@@ -363,7 +260,7 @@ Ghost activity
 
     Ghosts can throw any prop around the house. A prop moving does not indicate the ghost being nearby. Poltergeists throw objects with a random force between ((-5, 5), (-2.5, 2.5), (-3, 3)), while other ghosts throw them with a random force between ((-2.5, 2.5), (-2, 2), (-2.5, 2.5))
 
-Ghost Powers
+**Ghost Powers**
 
     All ghosts have a 4-in-12 chance of entering a ghost ability state.
     Ghosts that have specific behaviours (listed below) have a 2-in-12 chance of using their specific power on Amateur, and a 2-in-15 chance on other difficulties, once this state has been entered.
@@ -400,13 +297,13 @@ Wraith
     If the chosen player is outside the house, or dead, the Wraith will return to idle phase
     If the chosen player is in the house and not dead, the Wraith will teleport to a spot within 3m of the chosen player, then return to idle phase
     
-Ghost interactions
+**Ghost interactions**
 
     Ghosts have a 5-in-12 chance of doing random interactions such as opening doors, throwing props, and writing in ghost books, after satisfying the insanity check   above
     Random ghost interactions, including sounds, turning on faucets, moving items, teleporting items, etc, do not generate EMF spots.
     Being within 3m of a Jinn instantly drops your sanity by 25%
 
-Ghost Events
+**Ghost Events**
 
     Ghost events for the optional objective occur as part of random ghost interactions
     Ghosts have a 10-in-15 chance (which changes to 10-in-13 on higher difficulties) to enter a randomEvent phase
@@ -417,7 +314,7 @@ Ghost Events
         spawn a random player's model, play a scream if the spawned model or ghost is within 2m of the player
             This one doesn't seem to be implemented, as the game contains code to select a random player model, but never uses it
     A ghost event will decrease a random player's insanity by 20% (not sure if this is intended)
-Ghost phases
+**Ghost phases**
 
 Ghost phases are determined by average player sanity, multiplied by a hunting multiplier, and alternatively multiplied by an Oni or Wraith multiplier.
 In truck
@@ -471,7 +368,7 @@ Ghost appearing
     Ghosts have a random chance of appearing only as a shadow, but only for alive players. Dead players will always see the full model.
     1-in-2 chance if it is part of a random event. 1-in-3 chance as part of a hunt, appearance, or player kill
 
-Hunting
+**Hunting**
 
     Hunting phases last for 25 seconds in Amateur, 35 seconds in Intermediate, and 50 seconds in Professional.
 
